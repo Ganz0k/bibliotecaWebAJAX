@@ -297,6 +297,10 @@ function despliegaRevista() {
     despliegaObjeto("resultadosId", "Revista guardada", encabezados, revistas[revistas.length - 1]);
 }
 
+/**
+ * 
+ * 
+ */
 function obtenRevistas() {
     xhttp = new XMLHttpRequest();
     

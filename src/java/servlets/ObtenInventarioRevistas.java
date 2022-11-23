@@ -4,11 +4,13 @@
  */
 package servlets;
 
+import backup.InventarioRevistasFix;
 import com.google.gson.Gson;
 import controldao.InventarioRevistasJpaController;
 import dao.InventarioRevistas;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -32,21 +34,8 @@ public class ObtenInventarioRevistas extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        try ( PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet ObtenInventarioRevistas</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet ObtenInventarioRevistas at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
-        }
+    protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -64,8 +53,14 @@ public class ObtenInventarioRevistas extends HttpServlet {
         Gson gson = new Gson();
         InventarioRevistasJpaController control = new InventarioRevistasJpaController();
         List<InventarioRevistas> lista = control.findInventarioRevistasEntities();
+        List<InventarioRevistasFix> listaFix = new ArrayList<>();
         
-        String inventario = gson.toJson(lista);
+        for (InventarioRevistas iR : lista) {
+            InventarioRevistasFix iRF = new InventarioRevistasFix(iR.getId(), iR.getCantidad(), iR.getIsbnRevista().getIsbn());
+            listaFix.add(iRF);
+        }
+        
+        String inventario = gson.toJson(listaFix);
         try (PrintWriter out = response.getWriter()) {
             out.println(inventario);
             out.flush();
@@ -83,7 +78,7 @@ public class ObtenInventarioRevistas extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        
     }
 
     /**

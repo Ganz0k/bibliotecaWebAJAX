@@ -4,8 +4,11 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
             <file>file:/C:/Users/luisg/OneDrive/Documentos/Coding/Github/videocentrowebajax/src/java/servlets/ObtenRevistas.java</file>
+            <file>file:/C:/Users/luisg/OneDrive/Documentos/Coding/Github/videocentrowebajax/web/js/inventarios.js</file>
             <file>file:/C:/Users/luisg/OneDrive/Documentos/Coding/Github/videocentrowebajax/web/js/biblioteca.js</file>
-            <file>file:/C:/Users/luisg/OneDrive/Documentos/Coding/Github/videocentrowebajax/web/js/revistas.js</file>
+            <file>file:/C:/Users/luisg/OneDrive/Documentos/Coding/Github/videocentrowebajax/src/java/servlets/ObtenInventarioRevistas.java</file>
+            <file>file:/C:/Users/luisg/OneDrive/Documentos/Coding/Github/videocentrowebajax/src/java/backup/InventarioRevistasFix.java</file>
+            <file>file:/C:/Users/luisg/OneDrive/Documentos/Coding/Github/videocentrowebajax/src/java/dao/InventarioRevistas.java</file>
         </group>
     </open-files>
 </project-private>
