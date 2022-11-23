@@ -297,6 +297,17 @@ function despliegaRevista() {
     despliegaObjeto("resultadosId", "Revista guardada", encabezados, revistas[revistas.length - 1]);
 }
 
+function obtenRevistas() {
+    xhttp = new XMLHttpRequest();
+    
+    xhttp.onreadystatechange = despliegaRevistas;
+    
+    if (xhttp) {
+        xhttp.open('GET', 'ObtenRevistas', true);
+        xhttp.send(null);
+    }
+}
+
 /**
  * Función que despliega una tabla con los datos de
  * todas las revistas guardadas
@@ -304,13 +315,9 @@ function despliegaRevista() {
 function despliegaRevistas() {
     borraHijos("main");
     
-    var xhttp = new XMLHttpRequest();
-    xhttp.onreadystatechange = function() {
-        if (this.readyState === 4 && this.status === 200) {
-            const obj = JSON.parse(this.responseText);
-            despliegaTabla("main", "Catálogo de revistas", encabezados, obj);
-        }
-    };
-    xhttp.open("GET", "http://localhost:8080/ObtenRevistas", true);
-    xhttp.send();
+    if (xhttp.readyState === 4 && xhttp.status === 200) {
+        let revistas = JSON.parse(xhttp.responseText);
+        
+        despliegaTabla("main", "Catálogo de revistas", encabezados, revistas);
+    }
 }

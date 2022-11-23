@@ -18,7 +18,7 @@ let menuPrincipalFunciones = ["despliegaMenuRevistas()", "despliegaMenuInventari
 let menuRevistasItems = ["Agregar revista", "Actualizar revista", "Eliminar revistas", "Consultar revistas", "Regresar a menú principal"];
 
 //Funciones que implementan las operaciones con las revistas
-let menuRevistasFunciones = ["capturaIsbn()", "", "", "despliegaRevistas()", "despliegaMenuPrincipal()"];
+let menuRevistasFunciones = ["capturaIsbn()", "", "", "obtenRevistas()", "despliegaMenuPrincipal()"];
 
 //Opciones del menú con las operaciones con el inventario
 let menuInventariosItems = ["Inventariar revista", "Desinventariar revista", "Consultar inventario revistas", "Regresar a menú principal"];

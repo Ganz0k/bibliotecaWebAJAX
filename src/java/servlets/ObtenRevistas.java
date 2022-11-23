@@ -4,6 +4,7 @@
  */
 package servlets;
 
+import backup.CatalogoRevistasFix;
 import com.google.gson.Gson;
 import controldao.CatalogoRevistasJpaController;
 import dao.CatalogoRevistas;
@@ -11,8 +12,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -36,19 +35,7 @@ public class ObtenRevistas extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        try ( PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet ObtenRevistas</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet ObtenRevistas at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
-        }
+        
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -66,8 +53,14 @@ public class ObtenRevistas extends HttpServlet {
         Gson gson = new Gson();
         CatalogoRevistasJpaController control = new CatalogoRevistasJpaController();
         List<CatalogoRevistas> lista = control.findCatalogoRevistasEntities();
+        List<CatalogoRevistasFix> listaFix = new ArrayList<>();
         
-        String revistas = gson.toJson(lista);
+        for (CatalogoRevistas cR : lista) {
+            CatalogoRevistasFix cRF = new CatalogoRevistasFix(cR.getIsbn(), cR.getTitulo(), cR.getEditorial(), cR.getClasificacion(), cR.getPeriodicidad(), cR.getFecha().toString());
+            listaFix.add(cRF);
+        }
+        
+        String revistas = gson.toJson(listaFix);
         try (PrintWriter out = response.getWriter()) {
             out.println(revistas);
             out.flush();
@@ -84,7 +77,7 @@ public class ObtenRevistas extends HttpServlet {
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        processRequest(request, response);
+            
     }
 
     /**
