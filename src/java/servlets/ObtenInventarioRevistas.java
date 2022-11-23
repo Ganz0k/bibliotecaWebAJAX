@@ -4,8 +4,12 @@
  */
 package servlets;
 
+import com.google.gson.Gson;
+import controldao.InventarioRevistasJpaController;
+import dao.InventarioRevistas;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -55,9 +59,17 @@ public class ObtenInventarioRevistas extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        processRequest(request, response);
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        response.setContentType("application/json");
+        Gson gson = new Gson();
+        InventarioRevistasJpaController control = new InventarioRevistasJpaController();
+        List<InventarioRevistas> lista = control.findInventarioRevistasEntities();
+        
+        String inventario = gson.toJson(lista);
+        try (PrintWriter out = response.getWriter()) {
+            out.println(inventario);
+            out.flush();
+        }
     }
 
     /**

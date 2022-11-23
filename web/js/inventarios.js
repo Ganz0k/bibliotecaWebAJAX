@@ -6,8 +6,7 @@
  * Contiene las funciones que implementan las operaciones
  * con el inventario
  */
-let inventario = [{ revista: "Revista 1", cantidad: 40 }, { revista: "Revista 3", cantidad: 45 }, { revista: "Food for Thought", cantidad: 20 }];
-let encabezadosInventario = ["Revista", "Cantidad"];
+let encabezadosInventario = ["ID", "Revista", "Cantidad"];
 var revistaCapturada;
 var cantidad;
 
@@ -258,6 +257,14 @@ function despliegaRevistaDesinventariada() {
  */
 function despliegaInventarioRevistas() {
     borraHijos("main");
-
-    despliegaTabla("main", "Inventario de revistas", encabezadosInventario, inventario);
+    
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function () {
+        if (this.readyState === 4 && this.status === 200) {
+            const obj = JSON.parse(this.responseText);
+            despliegaTabla("main", "Inventario de revistas", encabezadosInventario, obj);
+        }
+    };
+    xhttp.open("GET", "http://localhost:8080/ObtenInventarioRevistas", true);
+    xhttp.send();
 }

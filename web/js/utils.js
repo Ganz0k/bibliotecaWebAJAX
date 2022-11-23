@@ -94,12 +94,6 @@ function despliegaTabla(padreID, titulo, encabezados, datos) {
     //Agrega el título a la tabla
     tabla.appendChild(tituloTabla);
 
-    //Crea el elemento thead para guardar los encabezados
-    //let grupoEncabezado = document.createElement("thead");
-
-    //Agrega el elemento thead a la tabla
-    //tabla.appendChild(grupoEncabezado);
-
     //Crea el renglón para los encabezados
     let renglonEncabezados = document.createElement("tr");
 
@@ -117,12 +111,6 @@ function despliegaTabla(padreID, titulo, encabezados, datos) {
         //Agrega la celda al renglón
         renglonEncabezados.appendChild(celdaEncabezado);
     }
-
-    //Crea el elemento tbody para guardar el resto de los renglones de la tabla
-    //let grupoCuerpo = document.createElement("tbody");
-
-    //Agrega el elemento tbody a la tabla
-    //tabla.appendChild(grupoCuerpo);
 
     //Ciclo for para llenar el resto de la tabla
     for (let dato of datos) {

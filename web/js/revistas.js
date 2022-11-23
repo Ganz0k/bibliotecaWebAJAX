@@ -13,10 +13,6 @@ var clasificacion;
 var periodicidad;
 var fecha;
 let encabezados = ["ISBN", "Título", "Editorial", "Clasificación", "Periodicidad", "Fecha"];
-let revistas = [{ isbn: "1111111111111", titulo: "Revista 1", editorial: "Editorial 1", clasificacion: "Clasificación 1", periodicidad: "Mensual", fecha: "2022-09-11" },
-{ isbn: "3333333333333", titulo: "Revista 3", editorial: "Editorial 3", clasificacion: "Clasificación 3", periodicidad: "Mensual", fecha: "2020-07-10" },
-{ isbn: "5555555555555", titulo: "Revista 5", editorial: "Editorial 5", clasificacion: "Clasificación 5", periodicidad: "Mensual", fecha: "2018-05-08" },
-{ isbn: "6660874042769", titulo: "Food for Thought", editorial: "Editorial c", clasificacion: "Científica", periodicidad: "Mensual", fecha: "2019-11-05" }];
 
 /**
  * Función que despliega un formulario para capturar el
@@ -303,10 +299,18 @@ function despliegaRevista() {
 
 /**
  * Función que despliega una tabla con los datos de
- * todas las revistas guardadas;
+ * todas las revistas guardadas
  */
 function despliegaRevistas() {
     borraHijos("main");
-
-    despliegaTabla("main", "Catálogo de revistas", encabezados, revistas);
+    
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+        if (this.readyState === 4 && this.status === 200) {
+            const obj = JSON.parse(this.responseText);
+            despliegaTabla("main", "Catálogo de revistas", encabezados, obj);
+        }
+    };
+    xhttp.open("GET", "http://localhost:8080/ObtenRevistas", true);
+    xhttp.send();
 }
