@@ -69,7 +69,7 @@ function capturaIsbn() {
 
     let boton = document.createElement("button");
     boton.setAttribute("type", "button");
-    boton.setAttribute("onclick", "capturaRevista()");
+    boton.setAttribute("onclick", "obtenRevista()");
     boton.innerHTML = "Continuar";
     celdaBoton.appendChild(boton);
 
@@ -81,6 +81,38 @@ function capturaIsbn() {
     let resultados = document.createElement("div");
     resultados.setAttribute("id", "resultadosId");
     padre.appendChild(resultados);
+}
+
+/**
+ * 
+ */
+function obtenRevista() {
+    isbn = document.getElementById("campoIsbnId").value;
+    xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = obtenRevistaRespuesta;
+    
+    if (xhttp) {
+        xhttp.open('GET', 'ObtenRevista?isbn=' + isbn, true);
+        xhttp.send(null);
+    }
+}
+
+/**
+ * 
+ */
+function obtenRevistaRespuesta() {
+    borraHijos("resultadosId");
+    
+    if (xhttp.readyState === 4 && xhttp.status === 200) {
+        let respuesta = xhttp.responseText;
+        
+        if (!respuesta.startsWith('{}')) {
+            let revista = JSON.parse(respuesta);
+            
+            despliegaObjeto("resultadosId", "Revista repetida", encabezados, revista);
+        }
+        else capturaRevista();
+    }
 }
 
 /**
@@ -265,7 +297,7 @@ function capturaRevista() {
 
     let boton = document.createElement("button");
     boton.setAttribute("type", "button");
-    boton.setAttribute("onclick", "despliegaRevista()");
+    boton.setAttribute("onclick", "agregarRevista()");
     boton.innerHTML = "Continuar";
     celdaBoton.appendChild(boton);
 
@@ -283,22 +315,24 @@ function capturaRevista() {
  * Función que despliega una tabla con los datos de
  * la revista capturada.
  */
-function despliegaRevista() {
+function agregarRevista() {
+    isbn = document.getElementById("campoIsbnId").value;
     titulo = document.getElementById("campoTituloId").value;
     editorial = document.getElementById("campoEditorialId").value;
     clasificacion = document.getElementById("campoClasificacionId").value;
     periodicidad = document.getElementById("campoPeriodicidadId").value;
     fecha = document.getElementById("campoFechaId").value;
-
-    revistas.push({ isbn: isbn, titulo: titulo, editorial: editorial, clasificacion: clasificacion, periodicidad: periodicidad, fecha: fecha });
-
-    borraHijos("resultadosId");
-
-    despliegaObjeto("resultadosId", "Revista guardada", encabezados, revistas[revistas.length - 1]);
+    
+    xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = despliegaRevistas;
+    
+    if (xhttp) {
+        xhttp.open('GET', 'AgregaRevista?isbn=' + isbn + '&titulo=' + titulo + '&editorial=' + editorial + '&clasificacion=' + clasificacion + '&periodicidad=' + periodicidad + '&fecha=' + fecha, true);
+        xhttp.send(null);
+    }
 }
 
 /**
- * 
  * 
  */
 function obtenRevistas() {

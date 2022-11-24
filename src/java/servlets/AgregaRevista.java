@@ -4,8 +4,19 @@
  */
 package servlets;
 
+import backup.CatalogoRevistasFix;
+import com.google.gson.Gson;
+import controldao.CatalogoRevistasJpaController;
+import dao.CatalogoRevistas;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -28,21 +39,8 @@ public class AgregaRevista extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        try ( PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet AgregaRevista</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet AgregaRevista at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
-        }
+    protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -55,9 +53,49 @@ public class AgregaRevista extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        processRequest(request, response);
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        Gson gson = new Gson();
+        List<CatalogoRevistas> lista;
+        List<CatalogoRevistasFix> listaFix = new ArrayList<>();
+        CatalogoRevistasJpaController control = new CatalogoRevistasJpaController();
+        
+        response.setContentType("application/json");
+        String isbn = request.getParameter("isbn");
+        String titulo = request.getParameter("titulo");
+        String editorial = request.getParameter("editorial");
+        String clasificacion = request.getParameter("clasificacion");
+        String periodicidad = request.getParameter("periodicidad");
+        String sFecha = request.getParameter("fecha");
+        Date fecha = null;
+        
+        try {
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+            fecha = formatter.parse(sFecha);
+        } catch (ParseException e) {
+            Logger.getLogger(AgregaRevista.class.getName()).log(Level.SEVERE, null, e);
+        }
+        
+        CatalogoRevistas revista = new CatalogoRevistas(isbn, titulo, editorial, clasificacion);
+        revista.setPeriodicidad(periodicidad);
+        revista.setFecha(fecha);
+        try {
+            control.create(revista);
+        } catch (Exception e) {
+            Logger.getLogger(AgregaRevista.class.getName()).log(Level.SEVERE, null, e);
+        }
+        
+        lista = control.findCatalogoRevistasEntities();
+        
+        for (CatalogoRevistas cR : lista) {
+            CatalogoRevistasFix cRF = new CatalogoRevistasFix(cR.getIsbn(), cR.getTitulo(), cR.getEditorial(), cR.getClasificacion(), cR.getPeriodicidad(), cR.getFecha().toString());
+            listaFix.add(cRF);
+        }
+        
+        String revistas = gson.toJson(listaFix);
+        try (PrintWriter out = response.getWriter()) {
+            out.println(revistas);
+            out.flush();
+        }
     }
 
     /**

@@ -24,8 +24,7 @@ let menuRevistasFunciones = ["capturaIsbn()", "", "", "obtenRevistas()", "despli
 let menuInventariosItems = ["Inventariar revista", "Desinventariar revista", "Consultar inventario revistas", "Regresar a menú principal"];
 
 //Funciones que implementan las operaciones con el inventario
-let menuInventarioFunciones = ["capturaRevistaInventariar()", "capturaRevistaDesinventariar()", "obtenInventario()",
-    "despliegaMenuPrincipal()"];
+let menuInventarioFunciones = ["capturaRevistaInventariar()", "", "obtenInventario()", "despliegaMenuPrincipal()"];
 
 /**
  * Función para desplegar el menú principal de la aplicación.
