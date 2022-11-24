@@ -54,7 +54,7 @@ public class InventariarRevista extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         Gson gson = new Gson();
-        CatalogoRevistas catalogoRevistas = null;
+        CatalogoRevistas catalogoRevistas = new CatalogoRevistas();
         InventarioRevistas inventarioRevistas = null;
         InventarioRevistasJpaController controlInventario = new InventarioRevistasJpaController();
         CatalogoRevistasJpaController controlRevistas = new CatalogoRevistasJpaController();
@@ -73,20 +73,20 @@ public class InventariarRevista extends HttpServlet {
         }
         
         for (InventarioRevistas iR : listaInventario) {
-            if (catalogoRevistas == iR.getIsbnRevista()) {
+            if (catalogoRevistas.getInventarioRevistas().equals(iR)) {
                 inventarioRevistas = iR;
+                int cantidadOld = inventarioRevistas.getCantidad();
+                inventarioRevistas.setCantidad(cantidad + cantidadOld);
+            
+                try {
+                    controlInventario.edit(inventarioRevistas);
+                } catch (Exception e) {
+                    Logger.getLogger(InventariarRevista.class.getName()).log(Level.SEVERE, null, e);
+                }
             }
         }
         
-        if (inventarioRevistas != null) {
-            inventarioRevistas.setCantidad(inventarioRevistas.getCantidad() + cantidad);
-            
-            try {
-                controlInventario.edit(inventarioRevistas);
-            } catch (Exception e) {
-                Logger.getLogger(InventariarRevista.class.getName()).log(Level.SEVERE, null, e);
-            }
-        } else {
+        if (inventarioRevistas == null) {
             inventarioRevistas = new InventarioRevistas(cantidad, catalogoRevistas);
             
             try {
