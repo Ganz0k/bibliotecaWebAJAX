@@ -42,7 +42,7 @@ CREATE TABLE `catalogo_revistas` (
 
 LOCK TABLES `catalogo_revistas` WRITE;
 /*!40000 ALTER TABLE `catalogo_revistas` DISABLE KEYS */;
-INSERT INTO `catalogo_revistas` VALUES ('1111111111111','Revista 1','Editorial 1','Clasificación 1','Mensual','2022-09-11'),('3333333333333','Revista 3','Editorial 3','Clasificación 3','Mensual','2020-07-10'),('5555555555555','Revista 5','Editorial 5','Clasificación 5','Mensual','2018-05-08'),('6660874042769','Food for Thought','Editorial c','Cientifica','Mensual','2019-11-05');
+INSERT INTO `catalogo_revistas` VALUES ('1111111111111','Revista 1','Editorial 1','Clasificación 1','Mensual','2022-09-11'),('3333333333333','Revista 3','Editorial 3','Clasificación 3','Mensual','2020-07-10'),('5555555555555','Revista 5','Editorial 5','Clasificación 5','Mensual','2018-05-08'),('6660874042769','Food for Thought','Editorial c','Cientifica','Mensual','2019-11-05'),('8616363096758','Placer de la cocina','Editorial d','Cocina','Mensual','2018-03-21');
 /*!40000 ALTER TABLE `catalogo_revistas` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -55,4 +55,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-11-22 23:19:47
+-- Dump completed on 2022-11-24 13:13:48

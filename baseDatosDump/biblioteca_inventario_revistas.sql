@@ -32,7 +32,7 @@ CREATE TABLE `inventario_revistas` (
   UNIQUE KEY `isbn_revista_UNIQUE` (`isbn_revista`),
   KEY `isbn_idx` (`isbn_revista`),
   CONSTRAINT `isbn` FOREIGN KEY (`isbn_revista`) REFERENCES `catalogo_revistas` (`isbn`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -41,7 +41,7 @@ CREATE TABLE `inventario_revistas` (
 
 LOCK TABLES `inventario_revistas` WRITE;
 /*!40000 ALTER TABLE `inventario_revistas` DISABLE KEYS */;
-INSERT INTO `inventario_revistas` VALUES (1,'1111111111111',40),(2,'5555555555555',45),(3,'6660874042769',20);
+INSERT INTO `inventario_revistas` VALUES (1,'1111111111111',40),(2,'5555555555555',45),(3,'6660874042769',40),(4,'8616363096758',30);
 /*!40000 ALTER TABLE `inventario_revistas` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -54,4 +54,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-11-22 23:19:47
+-- Dump completed on 2022-11-24 13:13:48
