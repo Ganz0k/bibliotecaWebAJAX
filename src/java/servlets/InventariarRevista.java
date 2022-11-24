@@ -4,8 +4,18 @@
  */
 package servlets;
 
+import backup.InventarioRevistasFix;
+import com.google.gson.Gson;
+import controldao.CatalogoRevistasJpaController;
+import controldao.InventarioRevistasJpaController;
+import dao.CatalogoRevistas;
+import dao.InventarioRevistas;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -28,21 +38,8 @@ public class InventariarRevista extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        try ( PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet InventariarRevista</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet InventariarRevista at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
-        }
+    protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -55,9 +52,62 @@ public class InventariarRevista extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        processRequest(request, response);
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        Gson gson = new Gson();
+        CatalogoRevistas catalogoRevistas = null;
+        InventarioRevistas inventarioRevistas = null;
+        InventarioRevistasJpaController controlInventario = new InventarioRevistasJpaController();
+        CatalogoRevistasJpaController controlRevistas = new CatalogoRevistasJpaController();
+        List<InventarioRevistas> listaInventario = controlInventario.findInventarioRevistasEntities();
+        List<CatalogoRevistas> listaRevistas = controlRevistas.findCatalogoRevistasEntities();
+        List<InventarioRevistasFix> listaFix = new ArrayList<>();
+        
+        response.setContentType("application/json");
+        String revista = request.getParameter("revista");
+        int cantidad = Integer.parseInt(request.getParameter("cantidad"));
+        
+        for (CatalogoRevistas cR : listaRevistas) {
+            if (revista.equals(cR.getTitulo())) {
+                catalogoRevistas = cR;
+            }
+        }
+        
+        for (InventarioRevistas iR : listaInventario) {
+            if (catalogoRevistas == iR.getIsbnRevista()) {
+                inventarioRevistas = iR;
+            }
+        }
+        
+        if (inventarioRevistas != null) {
+            inventarioRevistas.setCantidad(inventarioRevistas.getCantidad() + cantidad);
+            
+            try {
+                controlInventario.edit(inventarioRevistas);
+            } catch (Exception e) {
+                Logger.getLogger(InventariarRevista.class.getName()).log(Level.SEVERE, null, e);
+            }
+        } else {
+            inventarioRevistas = new InventarioRevistas(cantidad, catalogoRevistas);
+            
+            try {
+                controlInventario.create(inventarioRevistas);
+            } catch (Exception e) {
+                Logger.getLogger(InventariarRevista.class.getName()).log(Level.SEVERE, null, e);
+            }
+        }
+        
+        listaInventario = controlInventario.findInventarioRevistasEntities();
+        
+        for (InventarioRevistas iR : listaInventario) {
+            InventarioRevistasFix iRF = new InventarioRevistasFix(iR.getId(), iR.getCantidad(), iR.getIsbnRevista().getIsbn());
+            listaFix.add(iRF);
+        }
+        
+        String inventario = gson.toJson(listaFix);
+        try (PrintWriter out = response.getWriter()) {
+            out.println(inventario);
+            out.flush();
+        }
     }
 
     /**
@@ -69,9 +119,8 @@ public class InventariarRevista extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        processRequest(request, response);
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        
     }
 
     /**

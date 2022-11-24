@@ -43,13 +43,15 @@ function capturaRevistaInventariar() {
     celdaRevista.setAttribute("id", "celdaRevistaId");
     contenedorFormulario.appendChild(celdaRevista);
 
-    let tituloRevistas = [];
-    for (let i = 0; i < revistas.length; i++) {
-        tituloRevistas[i] = revistas[i].titulo;
-    }
+//    let tituloRevistas = [];
+//    for (let i = 0; i < revistas.length; i++) {
+//        tituloRevistas[i] = revistas[i].titulo;
+//    }
+//
+//    let sel = "- Seleccionar -";
+//    despliegaListaSel("celdaRevistaId", "revistaId", tituloRevistas, tituloRevistas, sel);
 
-    let sel = "- Seleccionar -";
-    despliegaListaSel("celdaRevistaId", "revistaId", tituloRevistas, tituloRevistas, sel);
+    obtenRevistasSel();
 
     let celdaVacia = document.createElement("div");
     celdaVacia.setAttribute("class", "span centrada");
@@ -91,7 +93,7 @@ function capturaRevistaInventariar() {
 
     let boton = document.createElement("button");
     boton.setAttribute("type", "button");
-    boton.setAttribute("onclick", "despliegaRevistaInventariada()");
+    boton.setAttribute("onclick", "inventariarRevista()");
     boton.innerHTML = "Continuar";
     celdaBoton.appendChild(boton);
 
@@ -106,35 +108,51 @@ function capturaRevistaInventariar() {
 }
 
 /**
- * Función que despliega la revista inventariada
- * en una tabla.
+ * 
  */
-function despliegaRevistaInventariada() {
-    revistaCapturada = document.getElementById("revistaId").value;
-    cantidad = parseInt(document.getElementById("cantidadId").value);
-    var objeto;
-
-    const indice = inventario.findIndex(object => {
-        return object.revista === revistaCapturada;
-    });
-
-    if (indice !== -1) {
-        var c = inventario[indice].cantidad
-        inventario[indice].cantidad = cantidad + c;
-        objeto = inventario[indice];
-        console.log(objeto)
-    } else {
-        inventario.push({ revista: revistaCapturada, cantidad: cantidad });
-        objeto = inventario[inventario.length - 1];
+function obtenRevistasSel() {
+    xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = llenarRevistasSel;
+    
+    if (xhttp) {
+        xhttp.open('GET', 'ObtenRevistas', true);
+        xhttp.send(null);
     }
-
-    borraHijos("resultadosId");
-
-    despliegaObjeto("resultadosId", "Revista inventariada", encabezadosInventario, objeto);
 }
 
 /**
  * 
+ */
+function llenarRevistasSel() {
+    if (xhttp.readyState === 4 && xhttp.status === 200) {
+        let revistas = JSON.parse(xhttp.responseText);
+        let tituloRevistas = [];
+        
+        for (i = 0; i < revistas.length; i++) {
+            tituloRevistas[i] = revistas[i].titulo;
+        }
+        
+        despliegaListaSel("celdaRevistaId", "revistaId", tituloRevistas, tituloRevistas, "-Seleccionar-");
+    }
+}
+
+/**
+ * 
+ */
+function inventariarRevista() {
+    revista = document.getElementById("revistaId").value;
+    cantidad = document.getElementById("cantidadId").value;
+    
+    xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = despliegaInventarioRevistas;
+    
+    if (xhttp) {
+        xhttp.open('GET', 'InventariarRevista?revista=' + revista + '&cantidad=' + cantidad, true);
+        xhttp.send(null);
+    }
+}
+
+/**
  * 
  */
 function obtenInventario() {

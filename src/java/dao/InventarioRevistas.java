@@ -55,6 +55,11 @@ public class InventarioRevistas implements Serializable {
         this.id = id;
         this.cantidad = cantidad;
     }
+    
+    public InventarioRevistas(int cantidad, CatalogoRevistas isbnRevista) {
+        this.cantidad = cantidad;
+        this.isbnRevista = isbnRevista;
+    }
 
     public Long getId() {
         return id;
