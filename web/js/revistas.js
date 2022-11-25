@@ -84,7 +84,9 @@ function capturaIsbn() {
 }
 
 /**
- * 
+ * Esta función realiza una solicitud asíncrona al servidor para obtener una
+ * revista de la base de datos.
+ * El servlet que atiende esta solicitud es ObtenRevista.
  */
 function obtenRevista() {
     isbn = document.getElementById("campoIsbnId").value;
@@ -98,7 +100,11 @@ function obtenRevista() {
 }
 
 /**
- * 
+ * Función de respuesta para procesar la respuesta a la solicitud asíncrona al
+ * servidor para obtener una revista de la base de datos. Si la revista existe,
+ * despliega sus atributos indicando que ya existe. En caso contrario invoca a
+ * la función capturaRevista() que despliega un formulario para capturar los
+ * datos de una revista a agregar a la base de datos.
  */
 function obtenRevistaRespuesta() {
     borraHijos("resultadosId");
@@ -312,8 +318,8 @@ function capturaRevista() {
 }
 
 /**
- * Función que despliega una tabla con los datos de
- * la revista capturada.
+ * Función que agrega una revista a la base de datos.
+ * El servlet que atiende esta función es AgregarRevista()
  */
 function agregarRevista() {
     isbn = document.getElementById("campoIsbnId").value;
@@ -333,7 +339,8 @@ function agregarRevista() {
 }
 
 /**
- * 
+ * Esta función realiza una solicitud asíncrona al servidor para obtener la
+ * lista de revistas.
  */
 function obtenRevistas() {
     xhttp = new XMLHttpRequest();

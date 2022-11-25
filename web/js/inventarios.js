@@ -108,7 +108,9 @@ function capturaRevistaInventariar() {
 }
 
 /**
- * 
+ * Esta función realiza una solicitud asíncrona al servidor para obtener la
+ * lista de revistas de la base de datos.
+ * El servlet que atiende esta solicitud es ObtenRevistas.
  */
 function obtenRevistasSel() {
     xhttp = new XMLHttpRequest();
@@ -121,7 +123,10 @@ function obtenRevistasSel() {
 }
 
 /**
- * 
+ * Función de respuesta para procesar la respuesta a la solicitud asíncrona al
+ * servidor para obtener la lista de revistas de la base de datos. Una vez
+ * obtenida se invoca a la función despliegaListaSel para llenar el campo de
+ * selección.
  */
 function llenarRevistasSel() {
     if (xhttp.readyState === 4 && xhttp.status === 200) {
@@ -137,7 +142,7 @@ function llenarRevistasSel() {
 }
 
 /**
- * 
+ * Función para inventariar una revista
  */
 function inventariarRevista() {
     revista = document.getElementById("revistaId").value;
@@ -153,7 +158,7 @@ function inventariarRevista() {
 }
 
 /**
- * 
+ * Obtiene la lista del inventario del servidor.
  */
 function obtenInventario() {
    xhttp = new XMLHttpRequest();
