@@ -43,16 +43,6 @@ function capturaRevistaInventariar() {
     celdaRevista.setAttribute("id", "celdaRevistaId");
     contenedorFormulario.appendChild(celdaRevista);
 
-//    let tituloRevistas = [];
-//    for (let i = 0; i < revistas.length; i++) {
-//        tituloRevistas[i] = revistas[i].titulo;
-//    }
-//
-//    let sel = "- Seleccionar -";
-//    despliegaListaSel("celdaRevistaId", "revistaId", tituloRevistas, tituloRevistas, sel);
-
-    obtenRevistasSel();
-
     let celdaVacia = document.createElement("div");
     celdaVacia.setAttribute("class", "span centrada");
     celdaVacia.innerHTML = "&nbsp;";
@@ -105,82 +95,95 @@ function capturaRevistaInventariar() {
     let resultados = document.createElement("div");
     resultados.setAttribute("id", "resultadosId");
     padre.appendChild(resultados);
+    
+    obtenRevistasSel();
 }
 
 /**
- * Esta función realiza una solicitud asíncrona al servidor para obtener la
- * lista de revistas de la base de datos.
- * El servlet que atiende esta solicitud es ObtenRevistas.
+ * Función que obtiene la lista de revistas de la base de datos.
  */
 function obtenRevistasSel() {
-    xhttp = new XMLHttpRequest();
-    xhttp.onreadystatechange = llenarRevistasSel;
-    
-    if (xhttp) {
-        xhttp.open('GET', 'ObtenRevistas', true);
-        xhttp.send(null);
-    }
+    fetch('ObtenRevistas').then(procesaRespuestaObtenRevistas).catch(muestraError);
 }
 
 /**
- * Función de respuesta para procesar la respuesta a la solicitud asíncrona al
- * servidor para obtener la lista de revistas de la base de datos. Una vez
- * obtenida se invoca a la función despliegaListaSel para llenar el campo de
- * selección.
+ * Procesa la respuesta de la función obtenRevistasSel.
+ * @param {type} response
  */
-function llenarRevistasSel() {
-    if (xhttp.readyState === 4 && xhttp.status === 200) {
-        let revistas = JSON.parse(xhttp.responseText);
-        let tituloRevistas = [];
-        
-        for (i = 0; i < revistas.length; i++) {
-            tituloRevistas[i] = revistas[i].titulo;
-        }
-        
-        despliegaListaSel("celdaRevistaId", "revistaId", tituloRevistas, tituloRevistas, "-Seleccionar-");
+function procesaRespuestaObtenRevistas(response) {
+    console.log('response.ok: ', response.ok);
+    if (response.ok) {
+        response.json().then(llenarRevistasSel);
+    } else {
+        muestraError('Código de status: ' + response.status + ' Descripción: ' + response.statusText);
     }
 }
 
 /**
- * Función para inventariar una revista
+ * Invoca a la función despliegaListaSel para llenar el campo de selección.
+ * @param {type} revistas
+ */
+function llenarRevistasSel(revistas) {
+    let tituloRevistas = [];
+    
+    for (i = 0; i < revistas.length; i++) {
+        tituloRevistas[i] = revistas[i].titulo;
+    }
+    
+    despliegaListaSel("celdaRevistaId", "revistaId", tituloRevistas, tituloRevistas, "-Seleccionar-");
+}
+
+/**
+ * Función para inventariar una revista.
  */
 function inventariarRevista() {
     revista = document.getElementById("revistaId").value;
     cantidad = document.getElementById("cantidadId").value;
     
-    xhttp = new XMLHttpRequest();
-    xhttp.onreadystatechange = despliegaInventarioRevistas;
+    fetch('InventariarRevista?revista=' + revista + '&cantidad=' + cantidad).then(procesaRespuestaInventariarRevista).catch(mensajeError);
+}
+
+/**
+ * Procesa la respuesta de la función inventariarRevista.
+ * @param {type} response
+ */
+function procesaRespuestaInventariarRevista(response) {
+    console.log('response.ok: ' + response.ok);
     
-    if (xhttp) {
-        xhttp.open('GET', 'InventariarRevista?revista=' + revista + '&cantidad=' + cantidad, true);
-        xhttp.send(null);
+    if (response.ok) {
+        response.json().then(despliegaInventarioRevistas);
+    } else {
+        muestraError('Código de status: ' + response.status + ' Descripción: ' + response.statusText);
     }
 }
 
 /**
  * Obtiene la lista del inventario del servidor.
  */
-function obtenInventario() {
-   xhttp = new XMLHttpRequest();
-   
-   xhttp.onreadystatechange = despliegaInventarioRevistas;
-   
-    if (xhttp) {
-        xhttp.open('GET', 'ObtenInventarioRevistas', true);
-        xhttp.send(null);
+function obtenInventario() {    
+    fetch('ObtenInventarioRevistas').then(procesaRespuestaObtenInventario).catch(mensajeError);
+}
+
+/**
+ * Procesa la respuesta de la función obtenInventario.
+ * @param {type} response
+ */
+function procesaRespuestaObtenInventario(response) {
+    console.log('response.ok: ' + response.ok);
+    
+    if (response.ok) {
+        response.json().then(despliegaInventarioRevistas);
+    } else {
+        muestraError('Código de status: ' + response.status + ' Descripción: ' + response.statusText);
     }
 }
 
 /**
- * Función que despliega una tabla con los datos de
- * todo el inventario
+ * Función que despliega una tabla con los datos de todo el inventario.
+ * @param {type} inventario
  */
-function despliegaInventarioRevistas() {
+function despliegaInventarioRevistas(inventario) {
     borraHijos("main");
-    
-    if (xhttp.readyState === 4 && xhttp.status === 200) {
-        let inventario = JSON.parse(xhttp.responseText);
-        
-        despliegaTabla("main", "Inventario de revistas", encabezadosInventario, inventario);
-    }
+
+    despliegaTabla("main", "Inventario de revistas", encabezadosInventario, inventario);
 }
