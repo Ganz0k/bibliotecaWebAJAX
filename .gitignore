@@ -1,1 +1,6 @@
 /build/
+/bibliotecaWebAJAX/build/
+/bibliotecaWebAJAX/nbproject/private/
+/bibliotecaWebRESTAPI/nbproject/private/
+/bibliotecaWebRESTAPI/dist/
+/bibliotecaWebRESTAPI/build/
