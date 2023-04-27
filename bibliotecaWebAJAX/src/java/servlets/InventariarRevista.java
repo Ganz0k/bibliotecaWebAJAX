@@ -6,8 +6,6 @@ package servlets;
 
 import backup.InventarioRevistasFix;
 import com.google.gson.Gson;
-import controldao.CatalogoRevistasJpaController;
-import controldao.InventarioRevistasJpaController;
 import dao.CatalogoRevistas;
 import dao.InventarioRevistas;
 import java.io.IOException;
@@ -21,6 +19,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import webserviceclients.CatalogoRevistasFacadeRESTClient;
+import webserviceclients.InventarioRevistasFacadeRESTClient;
 
 /**
  *
@@ -56,10 +56,10 @@ public class InventariarRevista extends HttpServlet {
         Gson gson = new Gson();
         CatalogoRevistas catalogoRevistas = new CatalogoRevistas();
         InventarioRevistas inventarioRevistas = null;
-        InventarioRevistasJpaController controlInventario = new InventarioRevistasJpaController();
-        CatalogoRevistasJpaController controlRevistas = new CatalogoRevistasJpaController();
-        List<InventarioRevistas> listaInventario = controlInventario.findInventarioRevistasEntities();
-        List<CatalogoRevistas> listaRevistas = controlRevistas.findCatalogoRevistasEntities();
+        InventarioRevistasFacadeRESTClient controlInventario = new InventarioRevistasFacadeRESTClient();
+        CatalogoRevistasFacadeRESTClient controlRevistas = new CatalogoRevistasFacadeRESTClient();
+        List<InventarioRevistas> listaInventario = controlInventario.findAll_JSON(List.class);
+        List<CatalogoRevistas> listaRevistas = controlRevistas.findAll_JSON(List.class);
         List<InventarioRevistasFix> listaFix = new ArrayList<>();
         
         response.setContentType("application/json");

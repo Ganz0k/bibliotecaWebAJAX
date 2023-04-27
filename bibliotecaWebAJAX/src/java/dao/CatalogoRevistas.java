@@ -17,14 +17,17 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
  * @author luisg
  */
 @Entity
-@Table(name = "catalogo_revistas")
+@Table(name = "CATALOGO_REVISTAS")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "CatalogoRevistas.findAll", query = "SELECT c FROM CatalogoRevistas c"),
@@ -39,20 +42,29 @@ public class CatalogoRevistas implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
-    @Column(name = "isbn")
+    @NotNull
+    @Size(min = 1, max = 13)
+    @Column(name = "ISBN")
     private String isbn;
     @Basic(optional = false)
-    @Column(name = "titulo")
+    @NotNull
+    @Size(min = 1, max = 50)
+    @Column(name = "TITULO")
     private String titulo;
     @Basic(optional = false)
-    @Column(name = "editorial")
+    @NotNull
+    @Size(min = 1, max = 35)
+    @Column(name = "EDITORIAL")
     private String editorial;
     @Basic(optional = false)
-    @Column(name = "clasificacion")
+    @NotNull
+    @Size(min = 1, max = 20)
+    @Column(name = "CLASIFICACION")
     private String clasificacion;
-    @Column(name = "periodicidad")
+    @Size(max = 20)
+    @Column(name = "PERIODICIDAD")
     private String periodicidad;
-    @Column(name = "fecha")
+    @Column(name = "FECHA")
     @Temporal(TemporalType.DATE)
     private Date fecha;
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "isbnRevista")
@@ -120,6 +132,7 @@ public class CatalogoRevistas implements Serializable {
         this.fecha = fecha;
     }
 
+    @XmlTransient
     public InventarioRevistas getInventarioRevistas() {
         return inventarioRevistas;
     }

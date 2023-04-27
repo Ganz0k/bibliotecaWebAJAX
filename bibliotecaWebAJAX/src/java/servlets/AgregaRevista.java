@@ -6,7 +6,6 @@ package servlets;
 
 import backup.CatalogoRevistasFix;
 import com.google.gson.Gson;
-import controldao.CatalogoRevistasJpaController;
 import dao.CatalogoRevistas;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -22,6 +21,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import webserviceclients.CatalogoRevistasFacadeRESTClient;
 
 /**
  *
@@ -57,7 +57,7 @@ public class AgregaRevista extends HttpServlet {
         Gson gson = new Gson();
         List<CatalogoRevistas> lista;
         List<CatalogoRevistasFix> listaFix = new ArrayList<>();
-        CatalogoRevistasJpaController control = new CatalogoRevistasJpaController();
+        CatalogoRevistasFacadeRESTClient control = new CatalogoRevistasFacadeRESTClient();
         
         response.setContentType("application/json");
         String isbn = request.getParameter("isbn");
@@ -71,20 +71,17 @@ public class AgregaRevista extends HttpServlet {
         try {
             SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
             fecha = formatter.parse(sFecha);
-        } catch (ParseException e) {
-            Logger.getLogger(AgregaRevista.class.getName()).log(Level.SEVERE, null, e);
+        } catch (ParseException pe) {
+            Logger.getLogger(AgregaRevista.class.getName()).log(Level.SEVERE, null, pe);
         }
         
         CatalogoRevistas revista = new CatalogoRevistas(isbn, titulo, editorial, clasificacion);
         revista.setPeriodicidad(periodicidad);
         revista.setFecha(fecha);
-        try {
-            control.create(revista);
-        } catch (Exception e) {
-            Logger.getLogger(AgregaRevista.class.getName()).log(Level.SEVERE, null, e);
-        }
         
-        lista = control.findCatalogoRevistasEntities();
+        control.create_JSON(revista);
+        
+        lista = control.findAll_JSON(List.class);
         
         for (CatalogoRevistas cR : lista) {
             CatalogoRevistasFix cRF = new CatalogoRevistasFix(cR.getIsbn(), cR.getTitulo(), cR.getEditorial(), cR.getClasificacion(), cR.getPeriodicidad(), cR.getFecha().toString());
@@ -92,6 +89,7 @@ public class AgregaRevista extends HttpServlet {
         }
         
         String revistas = gson.toJson(listaFix);
+        
         try (PrintWriter out = response.getWriter()) {
             out.println(revistas);
             out.flush();

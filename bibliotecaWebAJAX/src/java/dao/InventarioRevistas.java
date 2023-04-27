@@ -16,6 +16,7 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -23,11 +24,11 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author luisg
  */
 @Entity
-@Table(name = "inventario_revistas")
+@Table(name = "INVENTARIO_REVISTAS")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "InventarioRevistas.findAll", query = "SELECT i FROM InventarioRevistas i"),
-    @NamedQuery(name = "InventarioRevistas.findById", query = "SELECT i FROM InventarioRevistas i WHERE i.id = :id"),
+    @NamedQuery(name = "InventarioRevistas.findByIdInventario", query = "SELECT i FROM InventarioRevistas i WHERE i.idInventario = :idInventario"),
     @NamedQuery(name = "InventarioRevistas.findByCantidad", query = "SELECT i FROM InventarioRevistas i WHERE i.cantidad = :cantidad")})
 public class InventarioRevistas implements Serializable {
 
@@ -35,38 +36,34 @@ public class InventarioRevistas implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(name = "id")
-    private Long id;
+    @Column(name = "ID_INVENTARIO")
+    private Long idInventario;
     @Basic(optional = false)
-    @Column(name = "cantidad")
+    @NotNull
+    @Column(name = "CANTIDAD")
     private int cantidad;
-    @JoinColumn(name = "isbn_revista", referencedColumnName = "isbn")
+    @JoinColumn(name = "ISBN_REVISTA", referencedColumnName = "ISBN")
     @OneToOne(optional = false)
     private CatalogoRevistas isbnRevista;
 
     public InventarioRevistas() {
     }
 
-    public InventarioRevistas(Long id) {
-        this.id = id;
+    public InventarioRevistas(Long idInventario) {
+        this.idInventario = idInventario;
     }
 
-    public InventarioRevistas(Long id, int cantidad) {
-        this.id = id;
+    public InventarioRevistas(Long idInventario, int cantidad) {
+        this.idInventario = idInventario;
         this.cantidad = cantidad;
     }
-    
-    public InventarioRevistas(int cantidad, CatalogoRevistas isbnRevista) {
-        this.cantidad = cantidad;
-        this.isbnRevista = isbnRevista;
+
+    public Long getIdInventario() {
+        return idInventario;
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
+    public void setIdInventario(Long idInventario) {
+        this.idInventario = idInventario;
     }
 
     public int getCantidad() {
@@ -88,7 +85,7 @@ public class InventarioRevistas implements Serializable {
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
+        hash += (idInventario != null ? idInventario.hashCode() : 0);
         return hash;
     }
 
@@ -99,7 +96,7 @@ public class InventarioRevistas implements Serializable {
             return false;
         }
         InventarioRevistas other = (InventarioRevistas) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+        if ((this.idInventario == null && other.idInventario != null) || (this.idInventario != null && !this.idInventario.equals(other.idInventario))) {
             return false;
         }
         return true;
@@ -107,7 +104,7 @@ public class InventarioRevistas implements Serializable {
 
     @Override
     public String toString() {
-        return "dao.InventarioRevistas[ id=" + id + " ]";
+        return "dao.InventarioRevistas[ idInventario=" + idInventario + " ]";
     }
     
 }

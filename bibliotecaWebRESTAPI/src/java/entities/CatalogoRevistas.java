@@ -6,7 +6,6 @@ package entities;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -14,7 +13,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -68,8 +67,8 @@ public class CatalogoRevistas implements Serializable {
     @Column(name = "FECHA")
     @Temporal(TemporalType.DATE)
     private Date fecha;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "isbnRevista")
-    private List<InventarioRevistas> inventarioRevistasList;
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "isbnRevista")
+    private InventarioRevistas inventarioRevistas;
 
     public CatalogoRevistas() {
     }
@@ -134,12 +133,12 @@ public class CatalogoRevistas implements Serializable {
     }
 
     @XmlTransient
-    public List<InventarioRevistas> getInventarioRevistasList() {
-        return inventarioRevistasList;
+    public InventarioRevistas getInventarioRevistas() {
+        return inventarioRevistas;
     }
 
-    public void setInventarioRevistasList(List<InventarioRevistas> inventarioRevistasList) {
-        this.inventarioRevistasList = inventarioRevistasList;
+    public void setInventarioRevistas(InventarioRevistas inventarioRevistas) {
+        this.inventarioRevistas = inventarioRevistas;
     }
 
     @Override

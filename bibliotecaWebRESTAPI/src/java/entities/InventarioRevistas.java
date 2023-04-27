@@ -12,9 +12,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -43,7 +43,7 @@ public class InventarioRevistas implements Serializable {
     @Column(name = "CANTIDAD")
     private int cantidad;
     @JoinColumn(name = "ISBN_REVISTA", referencedColumnName = "ISBN")
-    @ManyToOne(optional = false)
+    @OneToOne(optional = false)
     private CatalogoRevistas isbnRevista;
 
     public InventarioRevistas() {

@@ -6,7 +6,6 @@ package servlets;
 
 import backup.CatalogoRevistasFix;
 import com.google.gson.Gson;
-import controldao.CatalogoRevistasJpaController;
 import dao.CatalogoRevistas;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -15,6 +14,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import webserviceclients.CatalogoRevistasFacadeRESTClient;
 
 /**
  *
@@ -49,12 +49,12 @@ public class ObtenRevista extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         Gson gson = new Gson();
         String revistaJson;
-        CatalogoRevistasJpaController control = new CatalogoRevistasJpaController();
+        CatalogoRevistasFacadeRESTClient control = new CatalogoRevistasFacadeRESTClient();
         
         response.setContentType("application/json");
         String isbn = request.getParameter("isbn");
         
-        CatalogoRevistas revista = control.findCatalogoRevistas(isbn);
+        CatalogoRevistas revista = control.find_JSON(CatalogoRevistas.class, isbn);
         
         if (revista != null) {
             CatalogoRevistasFix revistaFix = new CatalogoRevistasFix(revista.getIsbn(), revista.getTitulo(), revista.getEditorial(), revista.getClasificacion(), revista.getPeriodicidad(), revista.getFecha().toString());
