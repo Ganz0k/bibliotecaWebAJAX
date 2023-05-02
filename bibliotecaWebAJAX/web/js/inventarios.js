@@ -9,7 +9,7 @@
  * con el inventario
  */
 
-let encabezadosInventario = ["ID", "Cantidad", "Revista"];
+let encabezadosInventario = ["Cantidad", "ID", "Clasificación", "Editorial", "Fecha", "ISBN", "Periodicidad", "Título"];
 var revistaCapturada;
 var cantidad;
 

@@ -124,14 +124,21 @@ function despliegaTabla(padreID, titulo, encabezados, datos) {
 
         //Ciclo for para cada miembro de cada objeto
         for (let llave in dato) {
-            //Crea una celda
-            let celda = document.createElement("td");
+            if (llave === "revista") {
+                for (let campo in llave) {
+                    let celda = document.createElement("td");
+                    celda.innerHTML = llave[campo];
+                    renglon.appendChild(celda);
+                }
+            } else {
+                let celda = document.createElement("td");
+            
+                //Agrega el texto de la celda
+                celda.innerHTML = dato[llave];
 
-            //Agrega el texto de la celda
-            celda.innerHTML = dato[llave];
-
-            //Agrega la celda al renglón
-            renglon.appendChild(celda);
+                //Agrega la celda al renglón
+                renglon.appendChild(celda);
+            }
         }
     }
 }

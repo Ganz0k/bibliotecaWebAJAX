@@ -6,7 +6,9 @@ package servlets;
 
 import com.google.gson.Gson;
 import java.io.IOException;
-import java.util.List;
+import java.io.PrintWriter;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -14,6 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.ClientErrorException;
 import tables.CatalogoRevistas;
+import tables.InventarioRevistas;
 import webserviceclients.CatalogoRevistasFacadeRESTClient;
 import webserviceclients.InventarioRevistasFacadeRESTClient;
 
@@ -51,17 +54,44 @@ public class InventariarRevista extends HttpServlet {
         Gson gson = new Gson();
         InventarioRevistasFacadeRESTClient inventarioClient = new InventarioRevistasFacadeRESTClient();
         CatalogoRevistasFacadeRESTClient catalogoClient = new CatalogoRevistasFacadeRESTClient();
-        String revistaEncontrada;
+        InventarioRevistas inventario = null;
         
         response.setContentType("application/json");
         String revista = request.getParameter("revista");
         int cantidad = Integer.parseInt(request.getParameter("cantidad"));
         
         try {
-            String revistaJson = catalogoClient.find_JSON(String.class, revista);
+            String revistaEncontrada = catalogoClient.find_JSON(String.class, revista);
+            CatalogoRevistas catalogoRevista = gson.fromJson(revistaEncontrada, CatalogoRevistas.class);
             
+            int n = Integer.parseInt(inventarioClient.countREST());
             
+            for (int i = 1; i <= n; i++) {
+                String iR = inventarioClient.find_JSON(String.class, String.valueOf(i));
+                inventario = gson.fromJson(iR, InventarioRevistas.class);
+                
+                if (inventario.getIsbnRevista().equals(catalogoRevista)) {
+                    int cantidadOld = inventario.getCantidad();
+                    inventario.setCantidad(cantidad + cantidadOld);
+                    inventarioClient.edit_JSON(gson.toJson(inventario), String.valueOf(inventario.getIdInventario()));
+                }
+                
+                break;
+            }
+            
+            if (inventario == null) {
+                inventario = new InventarioRevistas(cantidad, catalogoRevista);
+                inventarioClient.create_JSON(gson.toJson(inventario));
+            }
+            
+            String listaInventario = inventarioClient.findAll_JSON(String.class);
+            
+            try (PrintWriter out = response.getWriter()) {
+                out.println(listaInventario);
+                out.flush();
+            }
         } catch (ClientErrorException cee) {
+            Logger.getLogger(InventariarRevista.class.getName()).log(Level.SEVERE, null, cee);
         }
     }
 

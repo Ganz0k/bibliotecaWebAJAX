@@ -20,6 +20,11 @@ public class InventarioRevistas {
         this.isbnRevista = isbnRevista;
     }
 
+    public InventarioRevistas(int cantidad, CatalogoRevistas isbnRevista) {
+        this.cantidad = cantidad;
+        this.isbnRevista = isbnRevista;
+    }
+
     public long getIdInventario() {
         return idInventario;
     }

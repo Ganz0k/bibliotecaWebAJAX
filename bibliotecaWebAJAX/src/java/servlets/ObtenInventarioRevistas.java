@@ -6,11 +6,15 @@ package servlets;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.ws.rs.ClientErrorException;
+import webserviceclients.InventarioRevistasFacadeRESTClient;
 
 /**
  *
@@ -28,21 +32,8 @@ public class ObtenInventarioRevistas extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        try ( PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet ObtenInventarioRevistas</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet ObtenInventarioRevistas at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
-        }
+    protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -55,9 +46,20 @@ public class ObtenInventarioRevistas extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        processRequest(request, response);
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        response.setContentType("application/json");
+        InventarioRevistasFacadeRESTClient client = new InventarioRevistasFacadeRESTClient();
+        
+        try {
+            String json = client.findAll_JSON(String.class);
+            
+            try (PrintWriter out = response.getWriter()) {
+                out.println(json);
+                out.flush();
+            }
+        } catch (ClientErrorException cee) {
+            Logger.getLogger(ObtenInventarioRevistas.class.getName()).log(Level.SEVERE, null, cee);
+        }
     }
 
     /**

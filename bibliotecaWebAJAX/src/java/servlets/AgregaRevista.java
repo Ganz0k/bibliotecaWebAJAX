@@ -7,6 +7,9 @@ package servlets;
 import com.google.gson.Gson;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
@@ -59,14 +62,6 @@ public class AgregaRevista extends HttpServlet {
         String clasificacion = request.getParameter("clasificacion");
         String periodicidad = request.getParameter("periodicidad");
         String fecha = request.getParameter("fecha");
-        
-        if (periodicidad.isBlank()) {
-            periodicidad = null;
-        }
-        
-        if (fecha.isBlank()) {
-            fecha = null;
-        }
         
         CatalogoRevistas revista = new CatalogoRevistas(isbn, titulo, editorial, clasificacion, periodicidad, fecha);
         String revistaJson = gson.toJson(revista);

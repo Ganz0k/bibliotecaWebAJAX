@@ -15,7 +15,7 @@ var editorial;
 var clasificacion;
 var periodicidad;
 var fecha;
-let encabezados = ["ISBN", "Título", "Editorial", "Clasificación", "Periodicidad", "Fecha"];
+let encabezados = ["Clasificación", "Editorial", "Fecha", "ISBN", "Periodicidad", "Título"];
 
 /**
  * Función que despliega un formulario para capturar el
@@ -113,9 +113,10 @@ function obtenRevistaRespuesta() {
     borraHijos("resultadosId");
     
     if (xhttp.readyState === 4 && xhttp.status === 200) {
-        let respuesta = xhttp.responseText;
+        let respuesta = xhttp.responseText;+
+        console.log(respuesta)
         
-        if (!respuesta.startsWith('{}')) {
+        if (respuesta.startsWith('{')) {
             let revista = JSON.parse(respuesta);
             
             despliegaObjeto("resultadosId", "Revista repetida", encabezados, revista);
