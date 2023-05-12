@@ -113,7 +113,7 @@ function obtenRevistaRespuesta() {
     borraHijos("resultadosId");
     
     if (xhttp.readyState === 4 && xhttp.status === 200) {
-        let respuesta = xhttp.responseText;+
+        let respuesta = xhttp.responseText;
         console.log(respuesta)
         
         if (respuesta.startsWith('{')) {
