@@ -15,24 +15,36 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&display=swap" rel="stylesheet">
+    
+    <meta name="google-signin-client_id" content="1009019780470-86fgnje91d8uskuvkl30vqnp39jh0fcc.apps.googleusercontent.com">
     <link rel="stylesheet" href="css/styles.css">
     <script src="js/login.js"></script>
     <title>Biblioteca web</title>
 </head>
 
 <body>
+    
     <div class="titulo">
         <h1>Biblioteca web</h1>
     </div>
     <div class="container">
-        <form class="login-box">
+        <form class="login-box" action="biblioteca.html">
             <h2>Inicio de sesión</h2>
             <input type="text" id="username" class="txt-user" placeholder="Usuario"> <br>
             <input type="password" id="password" class="txt-pass" placeholder="Password"> <br>
+            
             <input type="button" class="btn-login" value="Inicio de sesion" onclick="signIn()">
+            <div class="googleBox">
+                <div class="g-signin2" data-onsuccess="onSignIn" id="miDiv"></div>
+           </div> 
         </form>
     </div>
-
+    <script>
+        function onSignIn(googleUser){
+            
+            }   
+    </script>
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
 </body>
 
 </html>
