@@ -52,9 +52,6 @@ input{
 h2{
     color: rgb(59, 59, 59);
 }
-.g-signin2{
-    margin: 0;
-}
 .btn-login{
     font-family: 'Nunito', sans-serif;
     height: 35px; 
